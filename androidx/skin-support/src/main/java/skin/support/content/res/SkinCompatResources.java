@@ -17,6 +17,11 @@ import java.util.List;
 import skin.support.SkinCompatManager;
 import skin.support.annotation.AnyRes;
 
+/**
+ * 类似于Resources类的功能
+ * 用来转换资源名称，换肤后的资源名称=默认资源名称+mSkinName；因为所有的资源都是使用默认的资源名称
+ * 根据全资源名称(package:type/entry)获取对应Id;
+ */
 public class SkinCompatResources {
     private static volatile SkinCompatResources sInstance;
     private Resources mResources;
@@ -107,6 +112,14 @@ public class SkinCompatResources {
         return getColorStateList(SkinCompatManager.getInstance().getContext(), resId);
     }
 
+    /**
+     * 根据全资源名称(package:type/entry)生成resId
+     * 换肤后的资源名称=默认资源名称+mSkinName；因为所有的资源都是使用默认的资源名称
+     *
+     * @param context
+     * @param resId
+     * @return
+     */
     public int getTargetResId(Context context, int resId) {
         try {
             String resName = null;
@@ -116,7 +129,9 @@ public class SkinCompatResources {
             if (TextUtils.isEmpty(resName)) {
                 resName = context.getResources().getResourceEntryName(resId);
             }
+            //根据resId获取资源名称
             String type = context.getResources().getResourceTypeName(resId);
+            //根据全资源名称(package:type/entry)生成resId
             return mResources.getIdentifier(resName, type, mSkinPkgName);
         } catch (Exception e) {
             // 换肤失败不至于应用崩溃.

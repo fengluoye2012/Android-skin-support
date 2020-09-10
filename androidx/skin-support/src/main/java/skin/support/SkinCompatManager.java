@@ -27,6 +27,9 @@ import skin.support.observe.SkinObservable;
 import skin.support.utils.SkinPreference;
 import skin.support.content.res.SkinCompatResources;
 
+/**
+ * 皮肤包加载、资源文件加载策略、以及换肤行为观察者
+ */
 public class SkinCompatManager extends SkinObservable {
     public static final int SKIN_LOADER_STRATEGY_NONE = -1;
     public static final int SKIN_LOADER_STRATEGY_ASSETS = 0;

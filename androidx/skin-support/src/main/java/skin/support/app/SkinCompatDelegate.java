@@ -14,9 +14,8 @@ import skin.support.annotation.NonNull;
 import skin.support.widget.SkinCompatSupportable;
 
 /**
- * Created by ximsfei on 2017/1/9.
+ * Factory2的实现类，用来创建View
  */
-
 public class SkinCompatDelegate implements LayoutInflater.Factory2 {
     private final Context mContext;
     private SkinCompatViewInflater mSkinCompatViewInflater;

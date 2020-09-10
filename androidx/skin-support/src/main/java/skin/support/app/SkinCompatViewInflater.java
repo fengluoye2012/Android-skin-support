@@ -20,9 +20,8 @@ import skin.support.collection.ArrayMap;
 import skin.support.view.ViewCompat;
 
 /**
- * Created by ximsfei on 17-1-9.
+ * 类似于LayoutInflater的功能
  */
-
 public class SkinCompatViewInflater {
     private static final Class<?>[] sConstructorSignature = new Class[]{
             Context.class, AttributeSet.class};
@@ -39,9 +38,12 @@ public class SkinCompatViewInflater {
 
     private final Object[] mConstructorArgs = new Object[2];
 
+    //创建View
     public final View createView(View parent, final String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+        //反射
         View view = createViewFromHackInflater(context, name, attrs);
 
+        //根据配置的LayoutInflater创建View
         if (view == null) {
             view = createViewFromInflater(context, name, attrs);
         }
@@ -84,6 +86,7 @@ public class SkinCompatViewInflater {
         return view;
     }
 
+    //在sClassPrefixList包下的系统View和自定义View
     public View createViewFromTag(Context context, String name, AttributeSet attrs) {
         if ("view".equals(name)) {
             name = attrs.getAttributeValue(null, "class");
@@ -92,7 +95,6 @@ public class SkinCompatViewInflater {
         try {
             mConstructorArgs[0] = context;
             mConstructorArgs[1] = attrs;
-
             if (-1 == name.indexOf('.')) {
                 for (int i = 0; i < sClassPrefixList.length; i++) {
                     final View view = createView(context, name, sClassPrefixList[i]);

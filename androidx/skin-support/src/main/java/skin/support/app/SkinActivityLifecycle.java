@@ -23,9 +23,14 @@ import skin.support.content.res.SkinCompatThemeUtils;
 import static skin.support.widget.SkinCompatHelper.INVALID_ID;
 import static skin.support.widget.SkinCompatHelper.checkResourceId;
 
+/**
+ * 用来管理Activity的生命周期变化，Activity onCreate()、onResume()换肤；
+ */
 public class SkinActivityLifecycle implements Application.ActivityLifecycleCallbacks {
     private static final String TAG = "SkinActivityLifecycle";
     private static volatile SkinActivityLifecycle sInstance = null;
+
+    //
     private WeakHashMap<Context, SkinCompatDelegate> mSkinDelegateMap;
     private WeakHashMap<Context, LazySkinObserver> mSkinObserverMap;
     /**
@@ -44,12 +49,14 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
         return sInstance;
     }
 
+    //初始化时设置Factory
     private SkinActivityLifecycle(Application application) {
         application.registerActivityLifecycleCallbacks(this);
         installLayoutFactory(application);
         SkinCompatManager.getInstance().addObserver(getObserver(application));
     }
 
+    //1、设置factory2；2、更新windowBackGround；3、更新View的属性
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         if (isContextSkinEnable(activity)) {
@@ -66,6 +73,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
 
     }
 
+    //加入被观察者队列中，更新View的属性
     @Override
     public void onActivityResumed(Activity activity) {
         mCurActivityRef = new WeakReference<>(activity);
@@ -151,6 +159,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
                 || context instanceof SkinCompatSupportable;
     }
 
+    //观察者模式，切换皮肤时通知；
     private class LazySkinObserver implements SkinObserver {
         private final Context mContext;
         private boolean mMarkNeedUpdate = false;
@@ -187,6 +196,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
             if (mContext instanceof Activity && isContextSkinEnable(mContext)) {
                 updateWindowBackground((Activity) mContext);
             }
+
             getSkinDelegate(mContext).applySkin();
             if (mContext instanceof SkinCompatSupportable) {
                 ((SkinCompatSupportable) mContext).applySkin();

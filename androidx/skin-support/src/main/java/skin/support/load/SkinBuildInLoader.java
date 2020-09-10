@@ -8,6 +8,9 @@ import skin.support.SkinCompatManager;
 import skin.support.SkinCompatManager.SkinLoaderStrategy;
 import skin.support.content.res.SkinCompatResources;
 
+/**
+ * app内不同文件夹资源文件加载策略
+ */
 public class SkinBuildInLoader implements SkinLoaderStrategy {
     @Override
     public String loadSkinInBackground(Context context, String skinName) {
@@ -19,6 +22,13 @@ public class SkinBuildInLoader implements SkinLoaderStrategy {
         return skinName;
     }
 
+    /**
+     * 根据resId获取资源名称；res文件中的资源命名
+     * @param context  {@link Context}
+     * @param skinName 皮肤包名称.
+     * @param resId    应用中需要换肤的资源ID.
+     * @return
+     */
     @Override
     public String getTargetResourceEntryName(Context context, String skinName, int resId) {
         return context.getResources().getResourceEntryName(resId) + "_" + skinName;

@@ -1,2 +1,13 @@
 ### 技术文档
--
+
+- 换肤的原理：通过设置factory2的方式，参考系统创建View的实现方式  创建View;每个View创建一个实现类，实现SkinCompatSupportable接口,
+  使用SkinCompatResources作为资源管理类类似于Resources的作用加载资源；
+
+  应用内资源换肤：根据默认resId,通过Resources类的getResourceEntryName()方法获取资源名称，加上皮肤名称生成对应的资源名称；然后Resources的getIdentifier()根据全资源名称(package:type/entry)获取对应的resId;
+  SD卡加载换肤：获取packageInfo，创建Resources,
+
+- 根据View的类型，创建不同的LayoutInflater类，根据name或者全类名创建View;如：SkinAppCompatViewInflater、SkinCardViewInflater
+
+- resId的生成规则：根据AssetManager的getResourceIdentifier(name, defType, defPackage) 即资源全名称(package:type/entry)生成唯一ID;
+
+- 读取sdk apk中资源？
