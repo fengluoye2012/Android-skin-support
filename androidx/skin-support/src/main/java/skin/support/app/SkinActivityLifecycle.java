@@ -30,7 +30,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
     private static final String TAG = "SkinActivityLifecycle";
     private static volatile SkinActivityLifecycle sInstance = null;
 
-    //
+    //每个Activity对应一个SkinCompatDelegate，其中缓存所有适用换肤的View;
     private WeakHashMap<Context, SkinCompatDelegate> mSkinDelegateMap;
     private WeakHashMap<Context, LazySkinObserver> mSkinObserverMap;
     /**
@@ -170,7 +170,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
 
         @Override
         public void updateSkin(SkinObservable observable, Object o) {
-            // 当前Activity，或者非Activity，立即刷新，否则延迟到下次onResume方法中刷新。
+            // 当前Activity为空，或者非Activity，立即刷新，否则延迟到下次onResume方法中刷新。
             if (mCurActivityRef == null
                     || mContext == mCurActivityRef.get()
                     || !(mContext instanceof Activity)) {
@@ -197,7 +197,9 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
                 updateWindowBackground((Activity) mContext);
             }
 
+            //刷新每个Activity对应SkinDelegate缓存的View;
             getSkinDelegate(mContext).applySkin();
+            //刷新每个适用换肤的Activity刷新状态栏等配置
             if (mContext instanceof SkinCompatSupportable) {
                 ((SkinCompatSupportable) mContext).applySkin();
             }

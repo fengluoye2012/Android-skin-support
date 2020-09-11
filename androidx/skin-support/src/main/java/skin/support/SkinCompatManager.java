@@ -406,6 +406,7 @@ public class SkinCompatManager extends SkinObservable {
             return null;
         }
 
+        //皮肤包加载完成之后，更新UI
         @Override
         protected void onPostExecute(String skinName) {
             synchronized (mLock) {
@@ -441,7 +442,7 @@ public class SkinCompatManager extends SkinObservable {
     }
 
     /**
-     * 获取皮肤包资源{@link Resources}.
+     * 获取皮肤包资源{@link Resources}. 通过context的方式 创建AssetManager和Resources
      *
      * @param skinPkgPath sdcard中皮肤包路径.
      * @return
@@ -449,11 +450,15 @@ public class SkinCompatManager extends SkinObservable {
     @Nullable
     public Resources getSkinResources(String skinPkgPath) {
         try {
+            //先获取指定路径的zip或者apk的PackageInfo
             PackageInfo packageInfo = mAppContext.getPackageManager().getPackageArchiveInfo(skinPkgPath, 0);
             packageInfo.applicationInfo.sourceDir = skinPkgPath;
             packageInfo.applicationInfo.publicSourceDir = skinPkgPath;
+            //获取packageInfo.applicationInfo获取Resources;然后再根据res获取AssetManager；
             Resources res = mAppContext.getPackageManager().getResourcesForApplication(packageInfo.applicationInfo);
+
             Resources superRes = mAppContext.getResources();
+            //通过构造函数创建Resources
             return new Resources(res.getAssets(), superRes.getDisplayMetrics(), superRes.getConfiguration());
         } catch (Exception e) {
             e.printStackTrace();

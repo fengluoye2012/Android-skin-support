@@ -12,6 +12,7 @@ public class SkinObservable {
         observers = new ArrayList<>();
     }
 
+    //排重；
     public synchronized void addObserver(SkinObserver o) {
         if (o == null) {
             throw new NullPointerException();
@@ -29,6 +30,7 @@ public class SkinObservable {
         notifyUpdateSkin(null);
     }
 
+    //通知观察者
     public void notifyUpdateSkin(Object arg) {
         SkinObserver[] arrLocal;
 

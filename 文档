@@ -3,11 +3,16 @@
 - 换肤的原理：通过设置factory2的方式，参考系统创建View的实现方式  创建View;每个View创建一个实现类，实现SkinCompatSupportable接口,
   使用SkinCompatResources作为资源管理类类似于Resources的作用加载资源；
 
-  应用内资源换肤：根据默认resId,通过Resources类的getResourceEntryName()方法获取资源名称，加上皮肤名称生成对应的资源名称；然后Resources的getIdentifier()根据全资源名称(package:type/entry)获取对应的resId;
-  SD卡加载换肤：获取packageInfo，创建Resources,
+  -- 应用内资源换肤：根据默认resId,通过Resources类的getResourceEntryName()方法获取资源名称，加上皮肤名称生成对应的资源名称；然后Resources的getIdentifier()根据全资源名称(package:type/entry)获取对应的resId;
+  -- SD卡加载换肤：获取packageInfo、AssetManager；创建Resources,找到对应目标皮肤包中同样resId对应资源
+  使用观察者模式，通知可见Activity的所有View(SkinCompatDelegate 实现LayoutInflater.Factory2接口，将适用换肤View即实现SkinCompatSupportable接口),Activity状态栏 加载新资源
 
-- 根据View的类型，创建不同的LayoutInflater类，根据name或者全类名创建View;如：SkinAppCompatViewInflater、SkinCardViewInflater
+- SkinActivityLifecycle管理Activity的生命周期变化，每个Activity对应一个SkinCompatDelegate，缓存当前Activity所有适用换肤的View;
+
+- 根据View的类型，创建不同的SkinLayoutInflater类，根据name或者全类名创建View;如：SkinAppCompatViewInflater、SkinCardViewInflater
 
 - resId的生成规则：根据AssetManager的getResourceIdentifier(name, defType, defPackage) 即资源全名称(package:type/entry)生成唯一ID;
 
-- 读取sdk apk中资源？
+- 如何读取sdk apk中资源？Android资源加载机制、Resources类和AssetManager类;通过反射或者Context的方式创建AssetManager和Resources;
+
+- 换肤时，如何处理已经存在的View？ 通知可见Activity 更新资源，非可见Activity的添加标记，可见时更新资源；

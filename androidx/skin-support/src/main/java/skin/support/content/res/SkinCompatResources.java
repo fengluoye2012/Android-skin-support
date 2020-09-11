@@ -24,6 +24,7 @@ import skin.support.annotation.AnyRes;
  */
 public class SkinCompatResources {
     private static volatile SkinCompatResources sInstance;
+    //SkinCompatManager 创建的Resources;
     private Resources mResources;
     private String mSkinPkgName = "";
     private String mSkinName = "";
@@ -64,6 +65,7 @@ public class SkinCompatResources {
             skinResources.clear();
         }
     }
+
 
     public void setupSkin(Resources resources, String pkgName, String skinName, SkinCompatManager.SkinLoaderStrategy strategy) {
         if (resources == null || TextUtils.isEmpty(pkgName) || TextUtils.isEmpty(skinName)) {

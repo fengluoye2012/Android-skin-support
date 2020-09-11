@@ -14,11 +14,14 @@ import skin.support.annotation.NonNull;
 import skin.support.widget.SkinCompatSupportable;
 
 /**
- * Factory2的实现类，用来创建View
+ * Factory2的实现类，用来创建View；
+ * 同时将所有适用换肤的View保存下来
  */
 public class SkinCompatDelegate implements LayoutInflater.Factory2 {
     private final Context mContext;
     private SkinCompatViewInflater mSkinCompatViewInflater;
+
+    //当前Activity的所有适用换肤的View
     private List<WeakReference<SkinCompatSupportable>> mSkinHelpers = new CopyOnWriteArrayList<>();
 
     private SkinCompatDelegate(Context context) {
