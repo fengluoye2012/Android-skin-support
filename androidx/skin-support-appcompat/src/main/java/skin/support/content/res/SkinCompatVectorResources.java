@@ -32,6 +32,7 @@ public class SkinCompatVectorResources implements SkinResources {
 
     private Drawable getSkinDrawableCompat(Context context, int resId) {
         if (AppCompatDelegate.isCompatVectorFromResourcesEnabled()) {
+            //不是默认皮肤
             if (!SkinCompatResources.getInstance().isDefaultSkin()) {
                 try {
                     return SkinCompatDrawableManager.get().getDrawable(context, resId);
@@ -57,6 +58,8 @@ public class SkinCompatVectorResources implements SkinResources {
             if (drawable != null) {
                 return drawable;
             }
+
+            //最后获取项目中的drawable;
             return AppCompatResources.getDrawable(context, resId);
         } else {
             if (!SkinCompatUserThemeManager.get().isColorEmpty()) {

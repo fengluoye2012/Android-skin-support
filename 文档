@@ -1,11 +1,27 @@
 ### 技术文档
 
-- 换肤的原理：通过设置factory2的方式，参考系统创建View的实现方式  创建View;每个View创建一个实现类，实现SkinCompatSupportable接口,
-  使用SkinCompatResources作为资源管理类类似于Resources的作用加载资源；
+- 换肤的原理：
+  1、Application和Activity通过设置Factory2的方式，实现onCreateView() 能够实现View的创建；每个View实现SkinCompatSupportable接口，在换肤时被调用；
+     每个View都创建一个实现类，处理与资源相关的加载
+
+  2、Application注册registerActivityLifecycleCallbacks()，管理Activity的生命周期变化，每个Activity对应一个SkinCompatDelegate和LazySkinObserver；
+     SkinCompatDelegate实现Factory2接口用来实现View创建，并且将所有支持换肤的View缓存下来；
+     采用观察者模式，每个Activity作为一个观察者，调用换肤时通知观察者；只有栈顶的Activity会理解执行，避免同时过多刷新操作，导致卡顿；
+  3、每个View分别创建SkinCompatHelper类，加载资源文件；通过对应换肤apk中或者系统默认的Resources来实现；
 
   -- 应用内资源换肤：根据默认resId,通过Resources类的getResourceEntryName()方法获取资源名称，加上皮肤名称生成对应的资源名称；然后Resources的getIdentifier()根据全资源名称(package:type/entry)获取对应的resId;
   -- SD卡加载换肤：获取packageInfo、AssetManager；创建Resources,找到对应目标皮肤包中同样resId对应资源
-  使用观察者模式，通知可见Activity的所有View(SkinCompatDelegate 实现LayoutInflater.Factory2接口，将适用换肤View即实现SkinCompatSupportable接口),Activity状态栏 加载新资源
+
+  主要的类：
+  - SkinCompatManager：门面，初始化相关配置、加载皮肤、创建Resources;
+  - SkinActivityLifecycle:管理Activity的生命周期、设置Factory2；同时缓存所有观察者，通知观察变化；
+  - SkinCompatDelegate、SkinCompatViewInflater：每个Activity的创建View、缓存View、更新所有View的皮肤；
+  - SkinCompatHelper：执行换肤行为，根据上次加载resId 找到目标换肤包中对应的资源，加载
+
+
+  好处：易于扩展，职责清晰，结构性良好，方便加入所有的自定义View和属性
+  弊端：类太多，所有需要换肤的类都要有实现累
+
 
 - SkinActivityLifecycle管理Activity的生命周期变化，每个Activity对应一个SkinCompatDelegate，缓存当前Activity所有适用换肤的View;
 

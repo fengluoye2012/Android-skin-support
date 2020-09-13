@@ -18,13 +18,15 @@ import skin.support.SkinCompatManager;
 import skin.support.annotation.AnyRes;
 
 /**
- * 类似于Resources类的功能
+ * 类似于Resources类的功能;用来对外提供各种方法
+ * <p>
  * 用来转换资源名称，换肤后的资源名称=默认资源名称+mSkinName；因为所有的资源都是使用默认的资源名称
  * 根据全资源名称(package:type/entry)获取对应Id;
  */
 public class SkinCompatResources {
     private static volatile SkinCompatResources sInstance;
-    //SkinCompatManager 创建的Resources;
+
+    //SkinCompatManager 创建的Resources;对应换肤apk中或者系统默认的Resources;
     private Resources mResources;
     private String mSkinPkgName = "";
     private String mSkinName = "";

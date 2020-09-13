@@ -32,7 +32,9 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
 
     //每个Activity对应一个SkinCompatDelegate，其中缓存所有适用换肤的View;
     private WeakHashMap<Context, SkinCompatDelegate> mSkinDelegateMap;
+    //每个Activity 作为一个观察者；被观察者变化后通知观察者改变；只有栈顶的Activity会理解执行，避免同时过多刷新操作，导致卡顿；
     private WeakHashMap<Context, LazySkinObserver> mSkinObserverMap;
+
     /**
      * 用于记录当前Activity，在换肤后，立即刷新当前Activity以及非Activity创建的View。
      */
@@ -186,6 +188,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
             }
         }
 
+        //通知观察者刷新元素分别为：1）、Activity的背景 2）、Activity所有的View 3）、状态栏等
         void updateSkinForce() {
             if (Slog.DEBUG) {
                 Slog.i(TAG, "Context: " + mContext + " updateSkinForce");

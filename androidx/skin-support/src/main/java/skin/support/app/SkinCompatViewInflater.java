@@ -20,19 +20,24 @@ import skin.support.collection.ArrayMap;
 import skin.support.view.ViewCompat;
 
 /**
- * 类似于LayoutInflater的功能
+ * 类似于LayoutInflater 的功能 创建View的主要类
  */
 public class SkinCompatViewInflater {
     private static final Class<?>[] sConstructorSignature = new Class[]{
             Context.class, AttributeSet.class};
     private static final int[] sOnClickAttrs = new int[]{android.R.attr.onClick};
 
+    //系统View的存在路径
+    // "android.widget." 下的基础View;TextView等
+    // "android.view." 如View、ViewGroup、SurfaceView、TextureView等
+    // "android.webkit." 如WebView
     private static final String[] sClassPrefixList = {
             "android.widget.",
             "android.view.",
             "android.webkit."
     };
 
+    //类的构造函数map
     private static final Map<String, Constructor<? extends View>> sConstructorMap
             = new ArrayMap<>();
 
@@ -48,6 +53,7 @@ public class SkinCompatViewInflater {
             view = createViewFromInflater(context, name, attrs);
         }
 
+        //根据xml tag创建View
         if (view == null) {
             view = createViewFromTag(context, name, attrs);
         }
@@ -95,6 +101,7 @@ public class SkinCompatViewInflater {
         try {
             mConstructorArgs[0] = context;
             mConstructorArgs[1] = attrs;
+            //创建系统View
             if (-1 == name.indexOf('.')) {
                 for (int i = 0; i < sClassPrefixList.length; i++) {
                     final View view = createView(context, name, sClassPrefixList[i]);
@@ -104,6 +111,7 @@ public class SkinCompatViewInflater {
                 }
                 return null;
             } else {
+                //创建自定义的View
                 return createView(context, name, null);
             }
         } catch (Exception e) {
@@ -141,6 +149,7 @@ public class SkinCompatViewInflater {
         a.recycle();
     }
 
+    //
     private View createView(Context context, String name, String prefix)
             throws ClassNotFoundException, InflateException {
         Constructor<? extends View> constructor = sConstructorMap.get(name);
@@ -151,6 +160,7 @@ public class SkinCompatViewInflater {
                 Class<? extends View> clazz = context.getClassLoader().loadClass(
                         prefix != null ? (prefix + name) : name).asSubclass(View.class);
 
+                //调用构造函数
                 constructor = clazz.getConstructor(sConstructorSignature);
                 sConstructorMap.put(name, constructor);
             }

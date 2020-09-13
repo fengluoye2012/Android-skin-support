@@ -8,6 +8,7 @@ import skin.support.annotation.NonNull;
 
 /**
  * 创建View，如SkinAppCompatViewInflater、SkinMaterialViewInflater、自定义View的LayoutInflater等；
+ * 类似于AppCompatViewInflater类的作用
  */
 public interface SkinLayoutInflater {
     View createView(@NonNull Context context, final String name, @NonNull AttributeSet attrs);

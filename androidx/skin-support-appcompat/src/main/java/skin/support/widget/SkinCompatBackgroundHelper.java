@@ -10,9 +10,9 @@ import skin.support.R;
 import skin.support.content.res.SkinCompatVectorResources;
 
 /**
- * Created by ximsfei on 2017/1/10.
+ * 每个有android:background 属性的View 初始化事创建一个SkinCompatBackgroundHelper，记录View的引用和resId；
+ *
  */
-
 public class SkinCompatBackgroundHelper extends SkinCompatHelper {
     private final View mView;
 

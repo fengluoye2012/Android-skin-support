@@ -14,8 +14,7 @@ import skin.support.annotation.NonNull;
 import skin.support.widget.SkinCompatSupportable;
 
 /**
- * Factory2的实现类，用来创建View；
- * 同时将所有适用换肤的View保存下来
+ * 实现Factory2接口，用来创建View；同时将所有适用换肤的View保存下来；每个Activity对应一个SkinCompatDelegate类
  */
 public class SkinCompatDelegate implements LayoutInflater.Factory2 {
     private final Context mContext;
@@ -56,6 +55,7 @@ public class SkinCompatDelegate implements LayoutInflater.Factory2 {
         return view;
     }
 
+    //创建View
     public View createView(View parent, final String name, @NonNull Context context,
                            @NonNull AttributeSet attrs) {
         if (mSkinCompatViewInflater == null) {

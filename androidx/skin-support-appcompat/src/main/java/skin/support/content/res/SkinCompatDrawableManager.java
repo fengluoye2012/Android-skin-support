@@ -177,6 +177,7 @@ final class SkinCompatDrawableManager {
         return getDrawable(context, resId, false);
     }
 
+    //获取Drawable
     Drawable getDrawable(@NonNull Context context, @DrawableRes int resId,
                          boolean failIfNotKnown) {
         checkVectorDrawableSetup(context);
@@ -319,6 +320,7 @@ final class SkinCompatDrawableManager {
 
             final long key = createCacheKey(tv);
 
+            //缓存中获取
             Drawable dr = getCachedDrawable(context, key);
             if (dr != null) {
                 if (DEBUG) {
@@ -329,6 +331,7 @@ final class SkinCompatDrawableManager {
                 return dr;
             }
 
+            //根据xml 生成Drawable；
             if (tv.string != null && tv.string.toString().endsWith(".xml")) {
                 // If the resource is an XML file, let's try and parse it
                 try {

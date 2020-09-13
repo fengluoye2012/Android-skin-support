@@ -1,9 +1,8 @@
 package skin.support.widget;
 
 /**
- * Created by ximsfei on 2017/1/10.
+ * 通知观察者中元素刷新
  */
-
 public interface SkinCompatSupportable {
     void applySkin();
 }
